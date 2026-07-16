@@ -8,23 +8,17 @@ import lombok.Data;
 import java.time.LocalDateTime;
 
 @Data
-@TableName("product")
-public class Product {
+@TableName("project_member")
+public class ProjectMember {
 
     @TableId(type = IdType.AUTO)
     private Long id;
 
-    private String name;
-
-    private String code;
-
-    private String version;
-
-    private String description;
-
     private Long projectId;
 
-    private LocalDateTime createdAt;
+    private Long userId;
 
-    private LocalDateTime updatedAt;
+    private String role;
+
+    private LocalDateTime joinedAt;
 }

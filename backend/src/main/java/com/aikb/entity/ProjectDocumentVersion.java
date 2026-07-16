@@ -8,23 +8,19 @@ import lombok.Data;
 import java.time.LocalDateTime;
 
 @Data
-@TableName("product")
-public class Product {
+@TableName("project_document_version")
+public class ProjectDocumentVersion {
 
     @TableId(type = IdType.AUTO)
     private Long id;
 
-    private String name;
+    private Long documentId;
 
-    private String code;
+    private Integer versionNumber;
 
-    private String version;
+    private String filePath;
 
-    private String description;
-
-    private Long projectId;
+    private Long fileSize;
 
     private LocalDateTime createdAt;
-
-    private LocalDateTime updatedAt;
 }

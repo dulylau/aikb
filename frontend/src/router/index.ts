@@ -27,6 +27,26 @@ const router = createRouter({
       name: 'ProductEdit',
       component: () => import('../views/ProductEdit.vue'),
     },
+    {
+      path: '/projects',
+      name: 'ProjectList',
+      component: () => import('../views/ProjectList.vue'),
+    },
+    {
+      path: '/projects/create',
+      name: 'ProjectCreate',
+      component: () => import('../views/ProjectCreate.vue'),
+    },
+    {
+      path: '/projects/:id',
+      name: 'ProjectDetail',
+      component: () => import('../views/ProjectDetail.vue'),
+    },
+    {
+      path: '/projects/:id/edit',
+      name: 'ProjectEdit',
+      component: () => import('../views/ProjectEdit.vue'),
+    },
   ],
 })
 

@@ -53,3 +53,48 @@ export interface PageResult<T> {
   current: number
   pages: number
 }
+
+export interface Project {
+  id: number
+  name: string
+  code: string
+  description: string
+  createdAt: string
+  updatedAt: string
+}
+
+export interface ProjectMember {
+  id: number
+  projectId: number
+  userId: number
+  role: string
+  joinedAt: string
+}
+
+export interface ProjectDetail extends Project {
+  productCount: number
+  products: Product[]
+  members: ProjectMember[]
+}
+
+export interface ProjectDocument {
+  id: number
+  projectId: number
+  title: string
+  category: string
+  fileType: string
+  fileSize: number
+  filePath: string
+  currentVersion: number
+  createdAt: string
+  updatedAt: string
+}
+
+export interface ProjectDocumentVersion {
+  id: number
+  documentId: number
+  versionNumber: number
+  filePath: string
+  fileSize: number
+  createdAt: string
+}

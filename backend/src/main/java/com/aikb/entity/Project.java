@@ -8,8 +8,8 @@ import lombok.Data;
 import java.time.LocalDateTime;
 
 @Data
-@TableName("product")
-public class Product {
+@TableName("project")
+public class Project {
 
     @TableId(type = IdType.AUTO)
     private Long id;
@@ -18,11 +18,7 @@ public class Product {
 
     private String code;
 
-    private String version;
-
     private String description;
-
-    private Long projectId;
 
     private LocalDateTime createdAt;
 

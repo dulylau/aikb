@@ -69,3 +69,59 @@ CREATE TABLE IF NOT EXISTS document_permission (
     UNIQUE INDEX idx_perm_document_user (document_id, user_id),
     CONSTRAINT fk_perm_document FOREIGN KEY (document_id) REFERENCES document(id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='文档权限表';
+
+-- 扩展产品表：增加项目关联
+ALTER TABLE product ADD COLUMN IF NOT EXISTS project_id BIGINT COMMENT '所属项目ID';
+
+-- 项目表
+CREATE TABLE IF NOT EXISTS project (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(100) NOT NULL COMMENT '项目名称',
+    code VARCHAR(50) NOT NULL COMMENT '项目编码',
+    description TEXT COMMENT '项目描述',
+    created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+    UNIQUE INDEX idx_project_code (code),
+    INDEX idx_project_name (name)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='项目表';
+
+-- 项目成员表
+CREATE TABLE IF NOT EXISTS project_member (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    project_id BIGINT NOT NULL COMMENT '所属项目ID',
+    user_id BIGINT NOT NULL COMMENT '用户ID',
+    role VARCHAR(20) NOT NULL COMMENT '角色：OWNER, DEVELOPER, OBSERVER',
+    joined_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '加入时间',
+    UNIQUE INDEX idx_member_project_user (project_id, user_id),
+    CONSTRAINT fk_member_project FOREIGN KEY (project_id) REFERENCES project(id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='项目成员表';
+
+-- 项目文档表
+CREATE TABLE IF NOT EXISTS project_document (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    project_id BIGINT NOT NULL COMMENT '所属项目ID',
+    title VARCHAR(200) NOT NULL COMMENT '文档标题',
+    category VARCHAR(20) NOT NULL COMMENT '文档分类：TECHNICAL 或 BUSINESS',
+    file_type VARCHAR(10) NOT NULL COMMENT '文件扩展名',
+    file_size BIGINT NOT NULL COMMENT '文件大小（字节）',
+    file_path VARCHAR(500) NOT NULL COMMENT '文件存储路径',
+    current_version INT NOT NULL DEFAULT 1 COMMENT '最新版本号',
+    created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+    INDEX idx_pdoc_project (project_id),
+    INDEX idx_pdoc_category (category),
+    FULLTEXT INDEX idx_pdoc_title_fulltext (title),
+    CONSTRAINT fk_pdoc_project FOREIGN KEY (project_id) REFERENCES project(id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='项目文档表';
+
+-- 项目文档版本表
+CREATE TABLE IF NOT EXISTS project_document_version (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    document_id BIGINT NOT NULL COMMENT '所属文档ID',
+    version_number INT NOT NULL COMMENT '版本序号',
+    file_path VARCHAR(500) NOT NULL COMMENT '该版本的存储路径',
+    file_size BIGINT NOT NULL COMMENT '文件大小（字节）',
+    created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    UNIQUE INDEX idx_pdocver_document (document_id, version_number),
+    CONSTRAINT fk_pdocver_document FOREIGN KEY (document_id) REFERENCES project_document(id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='项目文档版本表';
