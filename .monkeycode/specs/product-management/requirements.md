@@ -1,10 +1,10 @@
-# Requirements Document
+# 需求文档
 
-## Introduction
+## 引言
 
 产品管理系统，用于管理产品/微服务模块的完整生命周期，包括产品信息管理、版本管理和产品文档管理。系统面向企业内部用户，提供产品的创建、编辑、查看和版本迭代能力，以及产品相关文档的上传、分类、预览和搜索功能。
 
-## Glossary
+## 术语表
 
 - **产品 (Product)**：企业内的产品/微服务模块，具有名称、编码、描述和版本信息
 - **产品编码 (Product Code)**：产品的唯一标识编码
@@ -13,138 +13,138 @@
 - **文档分类 (Document Category)**：文档的类型划分，包括技术类和业务类
 - **文档版本 (Document Version)**：文档的版本迭代记录，保留历史版本
 
-## Requirements
+## 需求
 
-### Requirement 1: Product List Display
+### 需求 1：产品列表展示
 
-**User Story:** AS a user, I want to view all available products in a card-based layout, so that I can quickly browse and navigate to product details.
+**用户故事：** 作为用户，我希望以卡片网格形式查看所有可用产品，以便快速浏览并导航到产品详情。
 
-#### Acceptance Criteria
+#### 验收标准
 
-1. The system SHALL display all products as cards in a responsive grid layout that automatically adjusts the number of cards per row based on page width.
-2. WHEN the product list page loads, the system SHALL render each product card displaying the product name (with product code), product version number, and product description.
-3. WHEN a user clicks a product card, the system SHALL navigate to the product detail page for that product.
-4. IF no products exist, the system SHALL display an empty state placeholder with a prompt to create a product.
+1. 系统 SHALL 以响应式网格布局展示所有产品为卡片形式，每行卡片个数根据页面宽度自动调整。
+2. WHEN 产品列表页面加载时，系统 SHALL 渲染每个产品卡片，展示产品名称（含产品编码）、产品版本号和产品描述。
+3. WHEN 用户点击产品卡片时，系统 SHALL 跳转到该产品的详情页面。
+4. IF 没有任何产品时，系统 SHALL 显示空状态占位提示，引导用户创建产品。
 
-### Requirement 2: Product Creation
+### 需求 2：产品创建
 
-**User Story:** AS a user, I want to create a new product by filling in required fields, so that I can register products in the system.
+**用户故事：** 作为用户，我希望通过填写必填字段来创建新产品，以便在系统中注册产品。
 
-#### Acceptance Criteria
+#### 验收标准
 
-1. WHEN the user clicks the create product button, the system SHALL display a form with fields for product name, product code, product description, and version number.
-2. The system SHALL validate that product name and product code are required fields before submission.
-3. The system SHALL validate that the product code is unique across all products.
-4. IF the product code already exists, the system SHALL display an error message and prevent creation.
-5. WHEN the form is submitted successfully, the system SHALL create the product and navigate to the product detail page.
+1. WHEN 用户点击创建产品按钮时，系统 SHALL 显示包含产品名称、产品编码、产品描述和版本号字段的表单。
+2. 系统 SHALL 在提交前校验产品名称和产品编码为必填字段。
+3. 系统 SHALL 校验产品编码在所有产品中唯一。
+4. IF 产品编码已存在，系统 SHALL 显示错误消息并阻止创建。
+5. WHEN 表单提交成功后，系统 SHALL 创建产品并跳转到产品详情页面。
 
-### Requirement 3: Product Detail Display
+### 需求 3：产品详情展示
 
-**User Story:** AS a user, I want to view product details with version-switchable document lists, so that I can access documents for different product versions.
+**用户故事：** 作为用户，我希望查看产品详情以及可切换版本的文档列表，以便访问不同产品版本的文档。
 
-#### Acceptance Criteria
+#### 验收标准
 
-1. WHEN the product detail page loads, the system SHALL display the product name, product code, product version, and product description.
-2. The system SHALL display a document list for the currently selected product version.
-3. WHEN the user switches between product versions using a version selector, the system SHALL refresh the document list to show documents for the selected version.
-4. WHEN the user clicks a document in the list, the system SHALL open a document preview dialog.
-5. The document preview dialog SHALL default to maximized mode and support toggle between maximized and restored states.
+1. WHEN 产品详情页面加载时，系统 SHALL 显示产品名称、产品编码、产品版本和产品描述。
+2. 系统 SHALL 显示当前所选产品版本的文档列表。
+3. WHEN 用户通过版本选择器切换产品版本时，系统 SHALL 刷新文档列表以展示所选版本的文档。
+4. WHEN 用户点击文档列表中的文档时，系统 SHALL 打开文档预览对话框。
+5. 文档预览对话框 SHALL 默认以最大化模式打开，并支持在最大化和还原状态之间切换。
 
-### Requirement 4: Product Editing
+### 需求 4：产品编辑
 
-**User Story:** AS a user, I want to edit an existing product's information, so that I can keep product details up to date.
+**用户故事：** 作为用户，我希望编辑现有产品的信息，以便保持产品详情为最新状态。
 
-#### Acceptance Criteria
+#### 验收标准
 
-1. WHEN the user clicks the edit button on the product detail page, the system SHALL display a pre-filled form with current product name, product code, product description, and version number.
-2. The system SHALL validate that product name is a required field.
-3. The system SHALL validate that the product code is unique, excluding the current product.
-4. WHEN the edit form is submitted successfully, the system SHALL update the product information and return to the product detail page.
+1. WHEN 用户在产品详情页面点击编辑按钮时，系统 SHALL 显示预填当前产品名称、产品编码、产品描述和版本号的表单。
+2. 系统 SHALL 校验产品名称为必填字段。
+3. 系统 SHALL 校验产品编码唯一（排除当前产品自身）。
+4. WHEN 编辑表单提交成功后，系统 SHALL 更新产品信息并返回产品详情页面。
 
-### Requirement 5: Product Version Management
+### 需求 5：产品版本管理
 
-**User Story:** AS a user, I want to manage multiple versions of a product, so that I can track the product's evolution over time.
+**用户故事：** 作为用户，我希望管理产品的多个版本，以便追踪产品随时间的变化演进。
 
-#### Acceptance Criteria
+#### 验收标准
 
-1. The system SHALL maintain an independent document list for each product version.
-2. WHEN the user creates a new version for a product, the system SHALL record the version number and associate it with the product.
-3. WHEN a version is selected, the system SHALL display only documents associated with that version.
-4. The system SHALL support version upgrade by creating a new version entry with an incremented version number.
+1. 系统 SHALL 为每个产品版本维护独立的文档列表。
+2. WHEN 用户为产品创建新版本时，系统 SHALL 记录版本号并将其关联到该产品。
+3. WHEN 某个版本被选中时，系统 SHALL 仅展示与该版本关联的文档。
+4. 系统 SHALL 支持通过创建递增版本号的新版本记录来实现版本升级。
 
-### Requirement 6: Document Category Management
+### 需求 6：文档分类管理
 
-**User Story:** AS a user, I want documents categorized by type, so that I can distinguish between technical and business documents.
+**用户故事：** 作为用户，我希望按类型对文档进行分类，以便区分技术文档和业务文档。
 
-#### Acceptance Criteria
+#### 验收标准
 
-1. The system SHALL support two document categories: Technical (development specifications, technical details) and Business (requirements documents, product introductions).
-2. WHEN the user uploads a document, the system SHALL require the user to select a document category.
-3. WHEN displaying the document list, the system SHALL group documents by their category or display the category label on each document item.
+1. 系统 SHALL 支持两种文档分类：技术类（开发规范、技术详细说明）和业务类（需求文档、产品介绍）。
+2. WHEN 用户上传文档时，系统 SHALL 要求用户选择文档分类。
+3. WHEN 展示文档列表时，系统 SHALL 按分类对文档进行分组或在每个文档项上显示分类标签。
 
-### Requirement 7: Document Upload
+### 需求 7：文档上传
 
-**User Story:** AS a user, I want to upload documents in common formats, so that I can associate documentation with products.
+**用户故事：** 作为用户，我希望上传常见格式的文档，以便将文档与产品关联起来。
 
-#### Acceptance Criteria
+#### 验收标准
 
-1. The system SHALL support uploading documents in Word (.doc, .docx), PDF (.pdf), and Markdown (.md) formats.
-2. WHEN the user initiates a document upload, the system SHALL display a file picker dialog filtered to supported formats.
-3. The system SHALL validate the uploaded file format and reject unsupported file types.
-4. The system SHALL enforce a maximum file size limit of 50MB per document.
-5. WHEN the upload completes successfully, the system SHALL associate the document with the selected product, version, and document category.
+1. 系统 SHALL 支持上传 Word（.doc、.docx）、PDF（.pdf）和 Markdown（.md）格式的文档。
+2. WHEN 用户发起文档上传时，系统 SHALL 显示限制为支持格式的文件选择对话框。
+3. 系统 SHALL 校验上传文件的格式并拒绝不支持的文件类型。
+4. 系统 SHALL 限制每个文档最大文件大小为 50MB。
+5. WHEN 上传成功完成后，系统 SHALL 将文档关联到所选产品、版本和文档分类。
 
-### Requirement 8: Document Version Management
+### 需求 8：文档版本管理
 
-**User Story:** AS a user, I want to track document version history, so that I can view and restore previous versions of documents.
+**用户故事：** 作为用户，我希望追踪文档的版本历史，以便查看和回溯文档的历史版本。
 
-#### Acceptance Criteria
+#### 验收标准
 
-1. WHEN a user uploads a new version of an existing document, the system SHALL create a new document version while retaining all historical versions.
-2. The system SHALL display the document version history list when viewing document details.
-3. WHEN the user selects a historical version from the version history, the system SHALL enable preview of that version.
-4. The system SHALL increment the document version number automatically with each new upload.
+1. WHEN 用户上传已有文档的新版本时，系统 SHALL 创建新的文档版本并保留所有历史版本。
+2. 系统 SHALL 在查看文档详情时展示文档版本历史列表。
+3. WHEN 用户从版本历史中选择某个历史版本时，系统 SHALL 支持预览该版本。
+4. 系统 SHALL 在每次新上传时自动递增文档版本号。
 
-### Requirement 9: Document Association
+### 需求 9：文档关联
 
-**User Story:** AS a user, I want to associate documents with specific product versions and functional areas, so that documents are organized and easy to find.
+**用户故事：** 作为用户，我希望将文档关联到特定的产品版本和功能点，以便文档组织有序、便于查找。
 
-#### Acceptance Criteria
+#### 验收标准
 
-1. WHEN uploading a document, the system SHALL require the user to select the target product and product version.
-2. The system SHALL support associating a document with a specific feature point by providing an optional feature point field.
+1. WHEN 上传文档时，系统 SHALL 要求用户选择目标产品和产品版本。
+2. 系统 SHALL 支持通过提供可选的功能点字段，将文档关联到特定功能点。
 
-### Requirement 10: Document Preview
+### 需求 10：文档预览
 
-**User Story:** AS a user, I want to preview documents online, so that I can read document content without downloading files.
+**用户故事：** 作为用户，我希望在线预览文档，以便无需下载文件即可阅读文档内容。
 
-#### Acceptance Criteria
+#### 验收标准
 
-1. WHEN the user clicks a document in the document list, the system SHALL render the document content in an inline preview dialog.
-2. The system SHALL support preview of PDF files with built-in rendering.
-3. The system SHALL support preview for Markdown files rendered as HTML.
-4. The system SHALL support preview for Word documents by converting to a web-renderable format.
-5. The preview dialog SHALL default to maximized mode and support toggle between maximized and restored window states.
+1. WHEN 用户点击文档列表中的文档时，系统 SHALL 在行内预览对话框中渲染文档内容。
+2. 系统 SHALL 支持使用内建渲染方式预览 PDF 文件。
+3. 系统 SHALL 支持将 Markdown 文件渲染为 HTML 进行预览。
+4. 系统 SHALL 支持将 Word 文档转换为可在 Web 端渲染的格式进行预览。
+5. 预览对话框 SHALL 默认以最大化模式打开，并支持在最大化和还原窗口状态之间切换。
 
-### Requirement 11: Document Search
+### 需求 11：文档搜索
 
-**User Story:** AS a user, I want to search documents by keywords, so that I can quickly find relevant documentation.
+**用户故事：** 作为用户，我希望按关键词搜索文档，以便快速找到相关文档。
 
-#### Acceptance Criteria
+#### 验收标准
 
-1. The system SHALL provide a search input field on the document list page.
-2. WHEN the user enters a keyword and submits the search, the system SHALL return documents whose title or content contains the keyword.
-3. The system SHALL support filtering search results by product and document category.
-4. IF no documents match the search criteria, the system SHALL display an empty results message.
+1. 系统 SHALL 在文档列表页面提供搜索输入框。
+2. WHEN 用户输入关键词并提交搜索时，系统 SHALL 返回标题或内容中包含该关键词的文档。
+3. 系统 SHALL 支持按产品和文档分类过滤搜索结果。
+4. IF 没有文档匹配搜索条件，系统 SHALL 显示空结果提示消息。
 
-### Requirement 12: Document Permission Control
+### 需求 12：文档权限控制
 
-**User Story:** AS an administrator, I want to control document viewing and editing permissions, so that I can restrict access to sensitive documentation.
+**用户故事：** 作为管理员，我希望控制文档的查看和编辑权限，以便限制对敏感文档的访问。
 
-#### Acceptance Criteria
+#### 验收标准
 
-1. The system SHALL support defining viewing permissions (read-only) and editing permissions (read-write) for each document.
-2. WHEN a user without viewing permission attempts to access a document, the system SHALL deny access and display a permission error message.
-3. WHEN a user without editing permission attempts to modify a document, the system SHALL deny the operation and display a permission error message.
-4. The system SHALL support assigning permissions to individual users and user groups.
-5. The system SHALL provide a default permission that grants product managers full access to documents under their products.
+1. 系统 SHALL 支持为每个文档定义查看权限（只读）和编辑权限（读写）。
+2. WHEN 无查看权限的用户尝试访问文档时，系统 SHALL 拒绝访问并显示权限错误消息。
+3. WHEN 无编辑权限的用户尝试修改文档时，系统 SHALL 拒绝操作并显示权限错误消息。
+4. 系统 SHALL 支持向单个用户和用户组分配权限。
+5. 系统 SHALL 提供默认权限，授予产品负责人对其产品下文档的完全访问权限。

@@ -1,48 +1,48 @@
-# Product Management - Technical Design
+# 产品管理 - 技术设计
 
-Feature Name: product-management
-Updated: 2026-07-16
+功能名称: product-management
+更新日期: 2026-07-16
 
-## Description
+## 概述
 
 产品管理系统，为企业提供产品/微服务模块的全生命周期管理，涵盖产品信息管理、版本管理和产品文档管理。系统采用前后端分离架构，支持文档上传、在线预览、全文搜索和权限控制。
 
-## Architecture
+## 系统架构
 
-### System Architecture
+### 系统架构图
 
 ```mermaid
 graph TD
-    A["Vue 3 SPA (Vite)"]
+    A["Vue 3 单页应用 (Vite)"]
     B["Spring Boot 3 REST API"]
     C["MySQL 8.0"]
-    D["Local File Storage"]
-    E["Nginx Reverse Proxy"]
+    D["本地文件存储"]
+    E["Nginx 反向代理"]
     E --> A
     E -->|"/api/*"| B
     A -->|"HTTP REST"| B
     B -->|"MyBatis-Plus"| C
-    B -->|"File I/O"| D
+    B -->|"文件 I/O"| D
 ```
 
-### Frontend Component Tree
+### 前端组件树
 
 ```mermaid
 graph TD
     A["App.vue"]
-    B["RouterView"]
-    C["ProductList"]
-    D["ProductCreate"]
-    E["ProductDetail"]
-    F["ProductEdit"]
-    G["DocumentPreview"]
-    H["DocumentUpload"]
-    I["ProductCard"]
-    J["ProductForm"]
-    K["VersionSelector"]
-    L["DocumentList"]
-    M["DocumentItem"]
-    N["SearchBar"]
+    B["RouterView（路由视图）"]
+    C["ProductList（产品列表）"]
+    D["ProductCreate（产品创建）"]
+    E["ProductDetail（产品详情）"]
+    F["ProductEdit（产品编辑）"]
+    G["DocumentPreview（文档预览）"]
+    H["DocumentUpload（文档上传）"]
+    I["ProductCard（产品卡片）"]
+    J["ProductForm（产品表单）"]
+    K["VersionSelector（版本选择器）"]
+    L["DocumentList（文档列表）"]
+    M["DocumentItem（文档项）"]
+    N["SearchBar（搜索栏）"]
     A --> B
     B --> C
     B --> D
@@ -59,15 +59,15 @@ graph TD
     L --> H
 ```
 
-### Backend Module Structure
+### 后端模块结构
 
 ```mermaid
 graph TD
-    A["Controller Layer"]
-    B["Service Layer"]
-    C["Repository Layer (Mapper)"]
-    D["MySQL Database"]
-    E["File Storage"]
+    A["Controller 控制层"]
+    B["Service 服务层"]
+    C["Repository 数据访问层 (Mapper)"]
+    D["MySQL 数据库"]
+    E["文件存储"]
     A1["ProductController"]
     A2["DocumentController"]
     A3["PermissionController"]
@@ -102,60 +102,60 @@ graph TD
     C5 --> D
 ```
 
-## Components and Interfaces
+## 组件与接口
 
-### Frontend Routes
+### 前端路由
 
-| Route | Component | Description |
+| 路由 | 组件 | 说明 |
 |-------|-----------|-------------|
-| `/products` | ProductList | Product list page with card grid |
-| `/products/create` | ProductCreate | Product creation form |
-| `/products/:id` | ProductDetail | Product detail with document list |
-| `/products/:id/edit` | ProductEdit | Product editing form |
+| `/products` | ProductList | 产品列表页，以卡片网格展示 |
+| `/products/create` | ProductCreate | 产品创建表单页 |
+| `/products/:id` | ProductDetail | 产品详情页，含文档列表 |
+| `/products/:id/edit` | ProductEdit | 产品编辑表单页 |
 
-### Frontend Components
+### 前端组件
 
-| Component | Props | Events | Description |
+| 组件 | Props | Events | 说明 |
 |-----------|-------|--------|-------------|
-| ProductCard | `product: Product` | `@click` | Product card with name, code, version, description |
-| ProductForm | `product?: Product`, `mode: 'create'\|'edit'` | `@submit`, `@cancel` | Product create/edit form |
-| VersionSelector | `versions: Version[]`, `current: Version` | `@change` | Version switch dropdown |
-| DocumentList | `productId: number`, `versionId: number` | `@preview`, `@upload`, `@search` | Document list grouped by category |
-| DocumentPreview | `document: Document` | `@close` | Document preview dialog with maximize/restore |
-| DocumentUpload | `productId: number`, `versionId: number` | `@uploaded` | Document upload dialog with category selection |
-| SearchBar | `placeholder: string` | `@search` | Search input with debounce |
+| ProductCard | `product: Product` | `@click` | 产品卡片，展示名称、编码、版本、描述 |
+| ProductForm | `product?: Product`, `mode: 'create'\|'edit'` | `@submit`, `@cancel` | 产品创建/编辑表单 |
+| VersionSelector | `versions: Version[]`, `current: Version` | `@change` | 版本切换下拉选择器 |
+| DocumentList | `productId: number`, `versionId: number` | `@preview`, `@upload`, `@search` | 文档列表，按分类分组展示 |
+| DocumentPreview | `document: Document` | `@close` | 文档预览弹窗，支持最大化/还原 |
+| DocumentUpload | `productId: number`, `versionId: number` | `@uploaded` | 文档上传弹窗，含分类选择 |
+| SearchBar | `placeholder: string` | `@search` | 搜索输入框，含防抖 |
 
-### REST API Endpoints
+### REST API 端点
 
-#### Product Management
+#### 产品管理
 
-| Method | Path | Request Body | Response | Description |
+| 方法 | 路径 | 请求体 | 响应 | 说明 |
 |--------|------|-------------|----------|-------------|
-| GET | `/api/products` | - | `PageResult<Product>` | List products with pagination |
-| GET | `/api/products/:id` | - | `ProductDetailVO` | Get product with current version and documents |
-| POST | `/api/products` | `ProductCreateDTO` | `Product` | Create product |
-| PUT | `/api/products/:id` | `ProductUpdateDTO` | `Product` | Update product |
-| DELETE | `/api/products/:id` | - | - | Delete product |
-| GET | `/api/products/:id/versions` | - | `List<ProductVersion>` | List product versions |
-| POST | `/api/products/:id/versions` | `VersionCreateDTO` | `ProductVersion` | Create product version |
+| GET | `/api/products` | - | `PageResult<Product>` | 分页获取产品列表 |
+| GET | `/api/products/:id` | - | `ProductDetailVO` | 获取产品详情（含当前版本和文档） |
+| POST | `/api/products` | `ProductCreateDTO` | `Product` | 创建产品 |
+| PUT | `/api/products/:id` | `ProductUpdateDTO` | `Product` | 更新产品 |
+| DELETE | `/api/products/:id` | - | - | 删除产品 |
+| GET | `/api/products/:id/versions` | - | `List<ProductVersion>` | 获取产品版本列表 |
+| POST | `/api/products/:id/versions` | `VersionCreateDTO` | `ProductVersion` | 创建产品版本 |
 
-#### Document Management
+#### 文档管理
 
-| Method | Path | Request Body | Response | Description |
+| 方法 | 路径 | 请求体 | 响应 | 说明 |
 |--------|------|-------------|----------|-------------|
-| POST | `/api/documents/upload` | `multipart/form-data` | `Document` | Upload document |
-| GET | `/api/documents/search` | query params | `PageResult<Document>` | Search documents |
-| GET | `/api/documents/:id` | - | `DocumentVO` | Get document detail |
-| GET | `/api/documents/:id/preview` | - | `stream` | Stream document for preview |
-| DELETE | `/api/documents/:id` | - | - | Delete document |
-| GET | `/api/documents/:id/versions` | - | `List<DocumentVersion>` | Document version history |
-| POST | `/api/documents/:id/versions` | `multipart/form-data` | `DocumentVersion` | Upload new document version |
-| PUT | `/api/documents/:id/permissions` | `PermissionUpdateDTO` | - | Update document permissions |
-| GET | `/api/documents/:id/permissions` | - | `List<Permission>` | Get document permissions |
+| POST | `/api/documents/upload` | `multipart/form-data` | `Document` | 上传文档 |
+| GET | `/api/documents/search` | 查询参数 | `PageResult<Document>` | 搜索文档 |
+| GET | `/api/documents/:id` | - | `DocumentVO` | 获取文档详情 |
+| GET | `/api/documents/:id/preview` | - | `stream` | 流式传输文档用于预览 |
+| DELETE | `/api/documents/:id` | - | - | 删除文档 |
+| GET | `/api/documents/:id/versions` | - | `List<DocumentVersion>` | 文档版本历史 |
+| POST | `/api/documents/:id/versions` | `multipart/form-data` | `DocumentVersion` | 上传文档新版本 |
+| PUT | `/api/documents/:id/permissions` | `PermissionUpdateDTO` | - | 更新文档权限 |
+| GET | `/api/documents/:id/permissions` | - | `List<Permission>` | 获取文档权限列表 |
 
-## Data Models
+## 数据模型
 
-### Database ER Diagram
+### 数据库 ER 图
 
 ```mermaid
 erDiagram
@@ -204,80 +204,80 @@ erDiagram
         varchar permission_type
         datetime granted_at
     }
-    product ||--o{ product_version : has
-    product ||--o{ document : has
-    product_version ||--o{ document : contains
-    document ||--o{ document_version : tracks
-    document ||--o{ document_permission : controls
+    product ||--o{ product_version : 拥有
+    product ||--o{ document : 包含
+    product_version ||--o{ document : 关联
+    document ||--o{ document_version : 追踪
+    document ||--o{ document_permission : 控制
 ```
 
-### Table Definitions
+### 表结构定义
 
-#### product (产品表)
+#### product（产品表）
 
-| Column | Type | Constraint | Description |
+| 列名 | 类型 | 约束 | 说明 |
 |--------|------|------------|-------------|
-| id | BIGINT | PK, AUTO_INCREMENT | Primary key |
-| name | VARCHAR(100) | NOT NULL | Product name |
-| code | VARCHAR(50) | NOT NULL, UNIQUE | Product code |
-| version | VARCHAR(20) | NOT NULL | Current version number |
-| description | TEXT | - | Product description |
-| created_at | DATETIME | NOT NULL, DEFAULT NOW() | Creation time |
-| updated_at | DATETIME | NOT NULL, DEFAULT NOW() ON UPDATE | Update time |
+| id | BIGINT | 主键, 自增 | 主键 |
+| name | VARCHAR(100) | NOT NULL | 产品名称 |
+| code | VARCHAR(50) | NOT NULL, UNIQUE | 产品编码 |
+| version | VARCHAR(20) | NOT NULL | 当前版本号 |
+| description | TEXT | - | 产品描述 |
+| created_at | DATETIME | NOT NULL, DEFAULT NOW() | 创建时间 |
+| updated_at | DATETIME | NOT NULL, DEFAULT NOW() ON UPDATE | 更新时间 |
 
-#### product_version (产品版本表)
+#### product_version（产品版本表）
 
-| Column | Type | Constraint | Description |
+| 列名 | 类型 | 约束 | 说明 |
 |--------|------|------------|-------------|
-| id | BIGINT | PK, AUTO_INCREMENT | Primary key |
-| product_id | BIGINT | FK(product.id), NOT NULL | Product reference |
-| version_number | VARCHAR(20) | NOT NULL | Version number (e.g., 1.0.0) |
-| sort_order | INT | NOT NULL, DEFAULT 0 | Sort order for display |
-| created_at | DATETIME | NOT NULL, DEFAULT NOW() | Creation time |
+| id | BIGINT | 主键, 自增 | 主键 |
+| product_id | BIGINT | 外键(product.id), NOT NULL | 所属产品 |
+| version_number | VARCHAR(20) | NOT NULL | 版本号（如 1.0.0） |
+| sort_order | INT | NOT NULL, DEFAULT 0 | 展示排序 |
+| created_at | DATETIME | NOT NULL, DEFAULT NOW() | 创建时间 |
 
-Unique constraint: (product_id, version_number)
+联合唯一约束: (product_id, version_number)
 
-#### document (文档表)
+#### document（文档表）
 
-| Column | Type | Constraint | Description |
+| 列名 | 类型 | 约束 | 说明 |
 |--------|------|------------|-------------|
-| id | BIGINT | PK, AUTO_INCREMENT | Primary key |
-| product_id | BIGINT | FK(product.id), NOT NULL | Product reference |
-| version_id | BIGINT | FK(product_version.id), NOT NULL | Associated product version |
-| title | VARCHAR(200) | NOT NULL | Document title |
-| category | VARCHAR(20) | NOT NULL | Category: TECHNICAL or BUSINESS |
-| file_type | VARCHAR(10) | NOT NULL | File extension: pdf, docx, md, etc |
-| file_size | BIGINT | NOT NULL | File size in bytes |
-| file_path | VARCHAR(500) | NOT NULL | Storage path on filesystem |
-| feature_point | VARCHAR(200) | - | Optional feature point association |
-| current_version | INT | NOT NULL, DEFAULT 1 | Latest version number |
-| created_at | DATETIME | NOT NULL, DEFAULT NOW() | Creation time |
-| updated_at | DATETIME | NOT NULL, DEFAULT NOW() ON UPDATE | Update time |
+| id | BIGINT | 主键, 自增 | 主键 |
+| product_id | BIGINT | 外键(product.id), NOT NULL | 所属产品 |
+| version_id | BIGINT | 外键(product_version.id), NOT NULL | 关联的产品版本 |
+| title | VARCHAR(200) | NOT NULL | 文档标题 |
+| category | VARCHAR(20) | NOT NULL | 分类：TECHNICAL 或 BUSINESS |
+| file_type | VARCHAR(10) | NOT NULL | 文件扩展名：pdf, docx, md 等 |
+| file_size | BIGINT | NOT NULL | 文件大小（字节） |
+| file_path | VARCHAR(500) | NOT NULL | 文件系统存储路径 |
+| feature_point | VARCHAR(200) | - | 可选的功能点关联 |
+| current_version | INT | NOT NULL, DEFAULT 1 | 最新版本号 |
+| created_at | DATETIME | NOT NULL, DEFAULT NOW() | 创建时间 |
+| updated_at | DATETIME | NOT NULL, DEFAULT NOW() ON UPDATE | 更新时间 |
 
-#### document_version (文档版本表)
+#### document_version（文档版本表）
 
-| Column | Type | Constraint | Description |
+| 列名 | 类型 | 约束 | 说明 |
 |--------|------|------------|-------------|
-| id | BIGINT | PK, AUTO_INCREMENT | Primary key |
-| document_id | BIGINT | FK(document.id), NOT NULL | Document reference |
-| version_number | INT | NOT NULL | Version sequence number |
-| file_path | VARCHAR(500) | NOT NULL | Storage path for this version |
-| file_size | BIGINT | NOT NULL | File size in bytes |
-| created_at | DATETIME | NOT NULL, DEFAULT NOW() | Creation time |
+| id | BIGINT | 主键, 自增 | 主键 |
+| document_id | BIGINT | 外键(document.id), NOT NULL | 所属文档 |
+| version_number | INT | NOT NULL | 版本序号 |
+| file_path | VARCHAR(500) | NOT NULL | 该版本的存储路径 |
+| file_size | BIGINT | NOT NULL | 文件大小（字节） |
+| created_at | DATETIME | NOT NULL, DEFAULT NOW() | 创建时间 |
 
-#### document_permission (文档权限表)
+#### document_permission（文档权限表）
 
-| Column | Type | Constraint | Description |
+| 列名 | 类型 | 约束 | 说明 |
 |--------|------|------------|-------------|
-| id | BIGINT | PK, AUTO_INCREMENT | Primary key |
-| document_id | BIGINT | FK(document.id), NOT NULL | Document reference |
-| user_id | BIGINT | NOT NULL | User identifier |
-| permission_type | VARCHAR(10) | NOT NULL | READ or WRITE |
-| granted_at | DATETIME | NOT NULL, DEFAULT NOW() | Grant time |
+| id | BIGINT | 主键, 自增 | 主键 |
+| document_id | BIGINT | 外键(document.id), NOT NULL | 所属文档 |
+| user_id | BIGINT | NOT NULL | 用户标识 |
+| permission_type | VARCHAR(10) | NOT NULL | 权限类型：READ 或 WRITE |
+| granted_at | DATETIME | NOT NULL, DEFAULT NOW() | 授权时间 |
 
-Unique constraint: (document_id, user_id)
+联合唯一约束: (document_id, user_id)
 
-### File Storage Schema
+### 文件存储结构
 
 ```
 /data/files/
@@ -291,9 +291,9 @@ Unique constraint: (document_id, user_id)
             document.pdf
 ```
 
-### Index Design
+### 索引设计
 
-| Table | Index Name | Columns | Type |
+| 表 | 索引名称 | 列 | 类型 |
 |-------|-----------|---------|------|
 | product | idx_product_code | code | UNIQUE |
 | product | idx_product_name | name | NORMAL |
@@ -304,51 +304,51 @@ Unique constraint: (document_id, user_id)
 | document_version | idx_docver_document | document_id, version_number | NORMAL |
 | document_permission | idx_perm_document_user | document_id, user_id | UNIQUE |
 
-## Correctness Properties
+## 正确性属性
 
-### Invariants
+### 不变式
 
-1. **Product Code Uniqueness**: Each product code MUST be unique across the system.
-2. **Version Number Uniqueness**: Each version_number MUST be unique within a single product.
-3. **Document Version Linearity**: Document version numbers MUST increase monotonically with each new upload (no gaps or duplicates within the same document).
-4. **Document-Product Association**: Every document MUST be associated with exactly one product and one product version.
-5. **File Path Referential Integrity**: The file_path stored in `document.file_path` and `document_version.file_path` MUST point to an existing file on the filesystem.
-6. **Permission Exclusivity**: For any (document_id, user_id) pair, at most one permission record MAY exist.
+1. **产品编码唯一性**：每个产品编码在整个系统中 MUST（必须）唯一。
+2. **版本号唯一性**：每个版本号在单个产品内 MUST（必须）唯一。
+3. **文档版本线性递增**：文档版本号 MUST（必须）在每次新上传时单调递增（同一文档内无间隙、无重复）。
+4. **文档-产品关联性**：每个文档 MUST（必须）关联到恰好一个产品和一个产品版本。
+5. **文件路径引用完整性**：存储在 `document.file_path` 和 `document_version.file_path` 中的路径 MUST（必须）指向文件系统上实际存在的文件。
+6. **权限排他性**：对于任意 (document_id, user_id) 对，MAY（至多）存在一条权限记录。
 
-### Transactional Boundaries
+### 事务边界
 
-- Product creation + initial version creation SHALL execute in a single transaction.
-- Document upload + file system write + document_version insert SHALL execute as an atomic operation; rollback file system changes on database failure.
-- Document deletion SHALL cascade delete all associated document_version records and files.
+- 产品创建 + 初始版本创建 SHALL（应当）在单个事务中执行。
+- 文档上传 + 文件系统写入 + document_version 插入 SHALL（应当）作为原子操作执行；数据库失败时回滚文件系统变更。
+- 文档删除 SHALL（应当）级联删除所有关联的 document_version 记录和物理文件。
 
-### Concurrency
+### 并发控制
 
-- Product code uniqueness is enforced at the database level via UNIQUE constraint.
-- Concurrent document uploads for the same document are serialized via the `document_version` insertion constraint.
-- Optimistic locking using `updated_at` timestamp for product and document updates.
+- 产品编码唯一性通过数据库级别的 UNIQUE 约束强制执行。
+- 同一文档的并发上传通过 `document_version` 插入约束序列化处理。
+- 产品和文档更新使用 `updated_at` 时间戳实现乐观锁。
 
-## Error Handling
+## 错误处理
 
-### HTTP Status Codes
+### HTTP 状态码
 
-| Scenario | Status | Code | Message |
+| 场景 | 状态码 | 错误码 | 消息 |
 |----------|--------|------|---------|
-| Validation failure | 400 | VALIDATION_ERROR | Specific field validation message |
-| Product code duplicate | 409 | PRODUCT_CODE_DUPLICATE | Product code already exists |
-| Product not found | 404 | PRODUCT_NOT_FOUND | Product with id {id} not found |
-| Document not found | 404 | DOCUMENT_NOT_FOUND | Document with id {id} not found |
-| Unsupported file type | 400 | UNSUPPORTED_FILE_TYPE | File type {type} is not supported |
-| File size exceeded | 400 | FILE_SIZE_EXCEEDED | File size exceeds 50MB limit |
-| Permission denied | 403 | PERMISSION_DENIED | Insufficient permissions |
-| File storage failure | 500 | FILE_STORAGE_ERROR | Failed to store uploaded file |
-| Internal server error | 500 | INTERNAL_ERROR | An unexpected error occurred |
+| 校验失败 | 400 | VALIDATION_ERROR | 具体字段校验错误消息 |
+| 产品编码重复 | 409 | PRODUCT_CODE_DUPLICATE | 产品编码已存在 |
+| 产品未找到 | 404 | PRODUCT_NOT_FOUND | 未找到 id 为 {id} 的产品 |
+| 文档未找到 | 404 | DOCUMENT_NOT_FOUND | 未找到 id 为 {id} 的文档 |
+| 不支持的文件类型 | 400 | UNSUPPORTED_FILE_TYPE | 文件类型 {type} 不受支持 |
+| 文件大小超限 | 400 | FILE_SIZE_EXCEEDED | 文件大小超出 50MB 限制 |
+| 权限不足 | 403 | PERMISSION_DENIED | 权限不足 |
+| 文件存储失败 | 500 | FILE_STORAGE_ERROR | 存储上传文件失败 |
+| 内部服务器错误 | 500 | INTERNAL_ERROR | 发生了意外错误 |
 
-### API Error Response Format
+### API 错误响应格式
 
 ```json
 {
   "code": "PRODUCT_CODE_DUPLICATE",
-  "message": "Product code already exists",
+  "message": "产品编码已存在",
   "timestamp": "2026-07-16T10:30:00Z",
   "details": {
     "field": "code",
@@ -357,59 +357,59 @@ Unique constraint: (document_id, user_id)
 }
 ```
 
-### Frontend Error Handling Strategy
+### 前端错误处理策略
 
-- Axios interceptor SHALL capture all HTTP errors and display user-friendly messages via Element Plus `ElMessage`.
-- Network errors (timeout, connection refused) SHALL display a generic retry prompt.
-- File upload failures SHALL provide specific error messaging (format, size, network).
-- Permission errors SHALL redirect unauthorized users and display access-denied UI.
+- Axios 拦截器 SHALL（应当）捕获所有 HTTP 错误并通过 Element Plus 的 `ElMessage` 显示用户友好提示消息。
+- 网络错误（超时、连接被拒绝）SHALL（应当）显示通用重试提示。
+- 文件上传失败 SHALL（应当）提供具体的错误消息（格式、大小、网络）。
+- 权限错误 SHALL（应当）重定向未授权用户并显示访问被拒绝界面。
 
-## Test Strategy
+## 测试策略
 
-### Backend Testing
+### 后端测试
 
-| Layer | Tool | Coverage Target | Focus |
+| 层级 | 工具 | 覆盖率目标 | 关注点 |
 |-------|------|-----------------|-------|
-| Unit | JUnit 5 + Mockito | 80%+ | Service layer business logic |
-| Repository | MyBatis-Plus Test | 90%+ | Mapper SQL correctness |
-| Integration | Spring Boot Test + TestContainers | Key scenarios | API endpoint behavior, transactional boundaries |
-| API | MockMvc | All endpoints | Request validation, response format, error handling |
+| 单元测试 | JUnit 5 + Mockito | 80%+ | Service 层业务逻辑 |
+| 数据层测试 | MyBatis-Plus Test | 90%+ | Mapper SQL 正确性 |
+| 集成测试 | Spring Boot Test + TestContainers | 关键场景 | API 端点行为、事务边界 |
+| API 测试 | MockMvc | 所有端点 | 请求校验、响应格式、错误处理 |
 
-### Frontend Testing
+### 前端测试
 
-| Layer | Tool | Coverage Target | Focus |
+| 层级 | 工具 | 覆盖率目标 | 关注点 |
 |-------|------|-----------------|-------|
-| Unit | Vitest + Vue Test Utils | 70%+ | Component rendering, store actions |
-| E2E | Playwright | Core flows | Product CRUD, document upload, preview |
+| 单元测试 | Vitest + Vue Test Utils | 70%+ | 组件渲染、Store 操作 |
+| E2E 测试 | Playwright | 核心流程 | 产品 CRUD、文档上传、预览 |
 
-### Key Test Scenarios
+### 核心测试场景
 
-1. Create product with duplicate code EXPECT 409
-2. Upload document with unsupported format EXPECT 400
-3. Upload document exceeding size limit EXPECT 400
-4. View document without permission EXPECT 403
-5. Concurrent document version upload EXPECT sequential version numbers
-6. Product version switch EXPECT correct document list refresh
-7. Document preview for PDF/Markdown/Word EXPECT rendered content
-8. Full-text search by keyword EXPECT matching documents returned
-9. Empty product list EXPECT empty state placeholder
-10. Network failure during upload EXPECT user-friendly error message
+1. 使用重复编码创建产品 → 期望 409
+2. 上传不支持的格式文档 → 期望 400
+3. 上传超出大小限制的文档 → 期望 400
+4. 无权限用户查看文档 → 期望 403
+5. 并发上传文档版本 → 期望版本号顺序递增
+6. 切换产品版本 → 期望文档列表正确刷新
+7. PDF/Markdown/Word 文档预览 → 期望正确渲染内容
+8. 按关键词全文搜索 → 期望返回匹配的文档
+9. 空产品列表 → 期望显示空状态占位
+10. 上传期间网络故障 → 期望显示用户友好的错误消息
 
-## Technology Stack
+## 技术栈
 
-| Layer | Technology | Version | Purpose |
+| 层级 | 技术 | 版本 | 用途 |
 |-------|-----------|---------|---------|
-| Frontend Framework | Vue 3 | 3.x | UI framework |
-| Build Tool | Vite | 5.x | Frontend build and dev server |
-| UI Library | Element Plus | 2.x | UI components |
-| State Management | Pinia | 2.x | Client-side state |
-| Router | Vue Router | 4.x | SPA routing |
-| HTTP Client | Axios | 1.x | API communication |
-| Language (Frontend) | TypeScript | 5.x | Type safety |
-| Backend Framework | Spring Boot | 3.x | REST API server |
-| ORM | MyBatis-Plus | 3.5.x | Database access |
-| Database | MySQL | 8.0 | Data persistence |
-| Build Tool (Backend) | Maven | 3.x | Dependency management |
-| Language (Backend) | Java | 17 | Runtime |
-| API Documentation | Knife4j (Swagger) | 4.x | API docs |
-| File Processing | Apache POI / PDFBox | latest | Document parsing |
+| 前端框架 | Vue 3 | 3.x | UI 框架 |
+| 构建工具 | Vite | 5.x | 前端构建与开发服务器 |
+| UI 组件库 | Element Plus | 2.x | UI 组件 |
+| 状态管理 | Pinia | 2.x | 客户端状态管理 |
+| 路由 | Vue Router | 4.x | SPA 路由 |
+| HTTP 客户端 | Axios | 1.x | API 通信 |
+| 前端语言 | TypeScript | 5.x | 类型安全 |
+| 后端框架 | Spring Boot | 3.x | REST API 服务器 |
+| ORM | MyBatis-Plus | 3.5.x | 数据库访问 |
+| 数据库 | MySQL | 8.0 | 数据持久化 |
+| 后端构建工具 | Maven | 3.x | 依赖管理 |
+| 后端语言 | Java | 17 | 运行时 |
+| API 文档 | Knife4j (Swagger) | 4.x | API 文档生成 |
+| 文件处理 | Apache POI / PDFBox | latest | 文档解析与预览 |
